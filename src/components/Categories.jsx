@@ -1,14 +1,12 @@
 import React, { useState, useRef } from 'react';
 import { motion } from 'framer-motion';
 
-// Main Gender Divisions
 const GENDER_CATEGORIES = [
   { id: 'men', label: 'Men', folder: 'Men', spec: 'Tailored Architecture & Structural Fit' },
   { id: 'women', label: 'Women', folder: 'Women', spec: 'Fluid Silhouette & Precise Cut' },
   { id: 'kids', label: 'Kids', folder: 'Kids', spec: 'Soft Durability & Comfort Motion' },
 ];
 
-// Independent Crafting Techniques (Regardless of Gender)
 const TECHNIQUE_CATEGORIES = [
   { id: 'knitwear', label: 'Knitwear', folder: 'Knitwear', spec: 'Loop · Stretch · Comfort' },
   { id: 'wovenwear', label: 'Wovenwear', folder: 'Wovenwear', spec: 'Structure · Drape · Integrity' },
@@ -19,17 +17,22 @@ export default function Categories() {
   const [activeCategory, setActiveCategory] = useState(null);
   const galleryRef = useRef(null);
 
-  // Dynamic image path resolver
   const getImagePath = (folderName, imgIndex) => {
     return `/StitchStudioPictures/${folderName}/image_${imgIndex}.jpeg`;
   };
 
-  // Click handler: Sets category and smooth-scrolls to the gallery viewer
   const handleSelectCategory = (cat) => {
     setActiveCategory(cat);
     setTimeout(() => {
       galleryRef.current?.scrollIntoView({ behavior: 'smooth', block: 'start' });
     }, 100);
+  };
+
+  const handleKeyDownSelect = (e, cat) => {
+    if (e.key === 'Enter' || e.key === ' ') {
+      e.preventDefault();
+      handleSelectCategory(cat);
+    }
   };
 
   return (
@@ -38,7 +41,6 @@ export default function Categories() {
       className="px-6 sm:px-10 py-24 sm:py-32 max-w-[120rem] mx-auto"
       aria-label="Material archive — crafting techniques"
     >
-      {/* Header */}
       <div className="mb-16 max-w-3xl">
         <span className="font-mono-stitch text-[10px] tracking-[0.35em] uppercase text-[#B08D57]">
           The Archive Collection
@@ -51,7 +53,7 @@ export default function Categories() {
         </p>
       </div>
 
-      {/* SECTION 1: MAIN GENDER DIVISIONS (Men, Women, Kids) */}
+      {/* SECTION 1: MAIN GENDER DIVISIONS */}
       <div className="mb-20">
         <h3 className="font-mono-stitch text-xs tracking-[0.3em] uppercase text-white/40 mb-6 flex items-center gap-3">
           <span className="w-6 h-px bg-[#B08D57]" />
@@ -62,12 +64,16 @@ export default function Categories() {
           {GENDER_CATEGORIES.map((cat, i) => (
             <motion.div
               key={cat.id}
+              role="button"
+              tabIndex={0}
+              aria-expanded={activeCategory?.id === cat.id}
               initial={{ y: 30, opacity: 0 }}
               whileInView={{ y: 0, opacity: 1 }}
               viewport={{ once: true }}
               transition={{ duration: 0.6, delay: i * 0.1 }}
               onClick={() => handleSelectCategory(cat)}
-              className={`group relative overflow-hidden rounded-sm border cursor-pointer transition-all ${
+              onKeyDown={(e) => handleKeyDownSelect(e, cat)}
+              className={`group relative overflow-hidden rounded-sm border cursor-pointer transition-all focus:outline-none focus:ring-2 focus:ring-[#B08D57] ${
                 activeCategory?.id === cat.id
                   ? 'border-[#B08D57] ring-1 ring-[#B08D57]'
                   : 'border-white/10 bg-[#111]'
@@ -79,7 +85,6 @@ export default function Categories() {
                   alt={cat.label}
                   className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
                   onError={(e) => {
-                    // Automatic fallback try for .jpg if .jpeg fails
                     if (e.target.src.endsWith('.jpeg')) {
                       e.target.src = `/StitchStudioPictures/${cat.folder}/image_1.jpg`;
                     } else {
@@ -104,7 +109,7 @@ export default function Categories() {
         </div>
       </div>
 
-      {/* SECTION 2: INDEPENDENT FABRIC TECHNIQUES (Knitwear, Wovenwear, Sportswear) */}
+      {/* SECTION 2: CRAFTING TECHNIQUES */}
       <div>
         <h3 className="font-mono-stitch text-xs tracking-[0.3em] uppercase text-white/40 mb-6 flex items-center gap-3">
           <span className="w-6 h-px bg-[#B08D57]" />
@@ -115,12 +120,16 @@ export default function Categories() {
           {TECHNIQUE_CATEGORIES.map((cat, i) => (
             <motion.div
               key={cat.id}
+              role="button"
+              tabIndex={0}
+              aria-expanded={activeCategory?.id === cat.id}
               initial={{ y: 30, opacity: 0 }}
               whileInView={{ y: 0, opacity: 1 }}
               viewport={{ once: true }}
               transition={{ duration: 0.6, delay: i * 0.1 }}
               onClick={() => handleSelectCategory(cat)}
-              className={`group relative overflow-hidden rounded-sm border cursor-pointer transition-all ${
+              onKeyDown={(e) => handleKeyDownSelect(e, cat)}
+              className={`group relative overflow-hidden rounded-sm border cursor-pointer transition-all focus:outline-none focus:ring-2 focus:ring-[#B08D57] ${
                 activeCategory?.id === cat.id
                   ? 'border-[#B08D57] ring-1 ring-[#B08D57]'
                   : 'border-white/10 bg-[#111]'
@@ -132,7 +141,6 @@ export default function Categories() {
                   alt={cat.label}
                   className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
                   onError={(e) => {
-                    // Automatic fallback try for .jpg if .jpeg fails
                     if (e.target.src.endsWith('.jpeg')) {
                       e.target.src = `/StitchStudioPictures/${cat.folder}/image_1.jpg`;
                     } else {
@@ -157,7 +165,7 @@ export default function Categories() {
         </div>
       </div>
 
-      {/* DYNAMIC GALLERY REVEAL (Triggers when clicking any card above) */}
+      {/* DYNAMIC GALLERY REVEAL */}
       {activeCategory && (
         <motion.div
           ref={galleryRef}
@@ -193,7 +201,6 @@ export default function Categories() {
                   alt={`${activeCategory.label} specimen ${imgIndex}`}
                   className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
                   onError={(e) => {
-                    // Try .jpg fallback if .jpeg fails
                     if (e.target.src.endsWith('.jpeg')) {
                       e.target.src = `/StitchStudioPictures/${activeCategory.folder}/image_${imgIndex}.jpg`;
                     } else {

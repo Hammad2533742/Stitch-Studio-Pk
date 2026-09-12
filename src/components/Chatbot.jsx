@@ -13,11 +13,9 @@ const SUGGESTIONS = [
 const INTRO =
   "Welcome to the Stitch Studio atelier. Ask me about our divisions, techniques, timelines, or manufacturing — I'll answer from our knowledge base. Anything else goes straight to our team.";
 
-// SECURITY: Hard limits to prevent abuse / large payloads
 const MAX_QUESTION_LENGTH = 500;
-const MAX_EMAIL_LENGTH = 254; // RFC 5321
+const MAX_EMAIL_LENGTH = 254;
 
-// SECURITY: Simple email format check — full validation happens server-side
 const isValidEmail = (v) => !v || /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(v);
 
 export default function Chatbot() {
@@ -40,7 +38,6 @@ export default function Chatbot() {
       const q = (text ?? input).trim();
       if (!q || loading) return;
 
-      // SECURITY: Enforce question length limit
       if (q.length > MAX_QUESTION_LENGTH) {
         setMessages((m) => [
           ...m,
@@ -49,7 +46,6 @@ export default function Chatbot() {
         return;
       }
 
-      // SECURITY: Validate email before sending
       const trimmedEmail = email.trim();
       if (trimmedEmail && !isValidEmail(trimmedEmail)) {
         setEmailError('Please enter a valid email address.');
@@ -64,12 +60,10 @@ export default function Chatbot() {
       try {
         const res = await base44.functions.invoke('StitchChatbot', {
           question: q,
-          // SECURITY: Only send email if provided and valid
           email: trimmedEmail || undefined,
         });
 
         const data = res?.data || {};
-        // SECURITY: Only use known safe fields from the response
         const reply =
           data.status === 'answered'
             ? String(data.answer || '').trim() ||
@@ -83,7 +77,6 @@ export default function Chatbot() {
           { role: 'bot', text: reply, routed: data.status === 'routed' },
         ]);
       } catch {
-        // SECURITY: Never expose raw error details to the user
         setMessages((m) => [
           ...m,
           {
@@ -154,7 +147,7 @@ export default function Chatbot() {
 
             {/* Message thread */}
             <div
-              ref={scrollRef}    // FIX: was ref__
+              ref={scrollRef}
               className="flex-1 overflow-y-auto px-4 py-4 space-y-3"
               role="log"
               aria-live="polite"
@@ -169,7 +162,6 @@ export default function Chatbot() {
                         : 'max-w-[85%] bg-white/5 border border-white/10 text-white/85 text-sm px-4 py-2.5 rounded-2xl rounded-bl-sm'
                     }
                   >
-                    {/* SECURITY: Text rendered via JSX — no dangerouslySetInnerHTML, XSS-safe */}
                     {m.text}
                     {m.routed && (
                       <div className="mt-2 pt-2 border-t border-white/10 font-mono-stitch text-[9px] tracking-[0.2em] uppercase text-[#B08D57]">
@@ -222,7 +214,6 @@ export default function Chatbot() {
                 type="email"
                 value={email}
                 onChange={(e) => {
-                  // SECURITY: Enforce email length limit
                   if (e.target.value.length <= MAX_EMAIL_LENGTH) {
                     setEmail(e.target.value);
                     setEmailError('');
@@ -249,7 +240,6 @@ export default function Chatbot() {
                 id="chatbot-input"
                 value={input}
                 onChange={(e) => {
-                  // SECURITY: Enforce question length limit silently
                   if (e.target.value.length <= MAX_QUESTION_LENGTH) {
                     setInput(e.target.value);
                   }

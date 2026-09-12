@@ -1,13 +1,9 @@
-import { useEffect, useRef } from 'react';
+import React, { useEffect, useRef } from 'react';
 
 /**
- * Subtle starfield + noise overlay fixed behind all content.
- *
- * SECURITY / STABILITY FIXES:
- * 1. ResizeObserver replaces window resize listener for more accurate tracking.
- * 2. Stars clamp to screen bounds on resize (no orphaned off-screen particles).
- * 3. cancelAnimationFrame and removeEventListener called on cleanup.
- * 4. canvas is aria-hidden — purely decorative.
+ * Starfield Component
+ * Renders an optimized 2D starfield with gold accent particles,
+ * dynamic twinking, smooth drift, and high-DPI (Retina) scaling.
  */
 export default function Starfield() {
   const canvasRef = useRef(null);
@@ -25,13 +21,16 @@ export default function Starfield() {
     const setup = () => {
       w = window.innerWidth;
       h = window.innerHeight;
+      
+      // High-DPI screen support (Retina crispness)
       const dpr = Math.min(window.devicePixelRatio || 1, 2);
       canvas.width = w * dpr;
       canvas.height = h * dpr;
-      canvas.style.width = w + 'px';
-      canvas.style.height = h + 'px';
+      canvas.style.width = `${w}px`;
+      canvas.style.height = `${h}px`;
       ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
 
+      // Density calculation: Scales particle count based on screen area
       const count = Math.min(220, Math.floor((w * h) / 9000));
       stars = Array.from({ length: count }, () => ({
         x: Math.random() * w,
@@ -40,7 +39,7 @@ export default function Starfield() {
         a: Math.random() * 0.6 + 0.15,
         s: Math.random() * 0.02 + 0.004,
         ph: Math.random() * Math.PI * 2,
-        gold: Math.random() < 0.12,
+        gold: Math.random() < 0.12, // ~12% gold accent particles
       }));
     };
 
@@ -49,16 +48,20 @@ export default function Starfield() {
       raf = requestAnimationFrame(draw);
       t += 1;
       ctx.clearRect(0, 0, w, h);
+
       for (const st of stars) {
+        // Sine-wave twinkle formula
         const tw = 0.5 + 0.5 * Math.sin(t * st.s + st.ph);
+        
         ctx.beginPath();
         ctx.arc(st.x, st.y, st.r, 0, Math.PI * 2);
         ctx.fillStyle = st.gold
           ? `rgba(176,141,87,${st.a * tw})`
           : `rgba(255,255,255,${st.a * tw})`;
         ctx.fill();
+
+        // Downward particle drift
         st.y += 0.03;
-        // FIX: clamp to current height in case of resize
         if (st.y > h) st.y = 0;
       }
     };
@@ -66,7 +69,7 @@ export default function Starfield() {
     setup();
     draw();
 
-    // FIX: ResizeObserver is more reliable than window resize for layout shifts
+    // ResizeObserver catches all viewport layout shifts accurately
     const ro = new ResizeObserver(() => setup());
     ro.observe(document.documentElement);
 
@@ -78,9 +81,9 @@ export default function Starfield() {
 
   return (
     <div className="fixed inset-0 -z-10 pointer-events-none" aria-hidden="true">
-      <canvas ref={canvasRef} className="w-full h-full" />   {/* FIX: was ref__ */}
+      <canvas ref={canvasRef} className="w-full h-full" />
       <div
-        className="absolute inset-0 opacity-[0.5]"
+        className="absolute inset-0 opacity-50"
         style={{
           background:
             'radial-gradient(ellipse at 50% 0%, rgba(176,141,87,0.10), transparent 55%), radial-gradient(ellipse at 50% 100%, rgba(176,141,87,0.06), transparent 60%)',

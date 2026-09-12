@@ -1,4 +1,5 @@
 import { motion, AnimatePresence } from 'framer-motion';
+import { X } from 'lucide-react';
 
 export default function SewingMascotOverlay({ isOpen, onClose }) {
   return (
@@ -8,68 +9,78 @@ export default function SewingMascotOverlay({ isOpen, onClose }) {
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           exit={{ opacity: 0 }}
-          className="fixed inset-0 z-[120] flex items-center justify-center bg-black/85 backdrop-blur-md p-4"
+          onClick={onClose}
+          className="fixed inset-0 z-[150] flex items-center justify-center bg-black/90 backdrop-blur-2xl p-6"
         >
+          {/* Modal Container */}
           <motion.div
-            initial={{ scale: 0.8, y: 20 }}
+            initial={{ scale: 0.9, y: 20 }}
             animate={{ scale: 1, y: 0 }}
-            exit={{ scale: 0.8, y: 20 }}
-            className="relative w-full max-w-lg bg-[#111] border border-[#B08D57]/40 rounded-2xl p-8 shadow-2xl overflow-hidden text-center"
+            exit={{ scale: 0.9, y: 20 }}
+            transition={{ duration: 0.5, ease: [0.16, 1, 0.3, 1] }}
+            onClick={(e) => e.stopPropagation()}
+            className="relative w-full max-w-2xl bg-[#0a0a0a] border border-white/10 rounded-xl p-10 sm:p-14 shadow-2xl overflow-hidden text-center"
           >
+            {/* Close Button */}
             <button
               type="button"
               onClick={onClose}
-              className="absolute top-4 right-4 text-white/40 hover:text-white font-mono-stitch text-xs uppercase"
+              className="absolute top-6 right-6 p-2 text-white/40 hover:text-white transition-colors"
+              aria-label="Close modal"
             >
-              [Close ✕]
+              <X className="w-6 h-6" />
             </button>
 
-            <span className="font-mono-stitch text-[10px] tracking-[0.3em] uppercase text-[#B08D57]">
-              Atelier Interactive Masterpiece
-            </span>
-            <h3 className="font-display text-2xl sm:text-3xl text-white mt-1 mb-4">
-              Stitching the Signature
-            </h3>
+            {/* Subtitle / Eyebrow */}
+            <motion.div
+              initial={{ opacity: 0, y: 10 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: 0.2 }}
+              className="flex items-center justify-center gap-3 mb-6"
+            >
+              <span className="w-6 h-px bg-[#B08D57]" />
+              <span className="font-mono-stitch text-[10px] tracking-[0.35em] uppercase text-[#B08D57]">
+                Atelier Signature Sequence
+              </span>
+              <span className="w-6 h-px bg-[#B08D57]" />
+            </motion.div>
 
-            {/* Tailor Character Upholding Brand Name in Excitement */}
-            <div className="relative w-full h-56 flex flex-col items-center justify-center bg-black/40 rounded-xl border border-white/5 my-2 p-4">
-              <svg viewBox="0 0 300 130" className="w-full h-full" fill="none">
-                {/* Excited Tailor Raising Hands */}
-                <g id="excited-tailor">
-                  <circle cx="150" cy="40" r="16" fill="#F3C6A5" />
-                  <circle cx="145" cy="38" r="2" fill="#111" />
-                  <circle cx="155" cy="38" r="2" fill="#111" />
-                  {/* Happy Smile */}
-                  <path d="M 145 44 Q 150 50 155 44" stroke="#111" strokeWidth="1.5" fill="none" />
-                  {/* Tailor Body */}
-                  <path d="M 132 56 L 168 56 L 160 100 L 140 100 Z" fill="#222" stroke="#B08D57" strokeWidth="1" />
-                  {/* Raised Excited Arms */}
-                  <motion.path
-                    animate={{ y: [-2, 2, -2] }}
-                    transition={{ repeat: Infinity, duration: 0.4 }}
-                    d="M 135 60 L 110 25 M 165 60 L 190 25"
-                    stroke="#F3C6A5"
-                    strokeWidth="5"
-                    strokeLinecap="round"
-                  />
-                </g>
-              </svg>
-
-              {/* Multi-Color Thread Logo Reveal Held High */}
+            {/* Glowing Metallic Thread Frame */}
+            <div className="relative py-12 px-6 border border-white/10 rounded-lg bg-black/50 overflow-hidden my-6">
+              {/* Animated Sewing Thread Border Effect */}
               <motion.div
-                initial={{ scale: 0.5, y: 20, opacity: 0 }}
-                animate={{ scale: 1, y: -20, opacity: 1 }}
-                transition={{ duration: 1, ease: 'easeOut' }}
-                className="px-6 py-2 rounded-lg border border-[#B08D57] bg-black/80 shadow-lg"
+                initial={{ pathLength: 0, opacity: 0 }}
+                animate={{ pathLength: 1, opacity: 1 }}
+                transition={{ duration: 1.5, ease: 'easeInOut' }}
+                className="absolute inset-0 border-2 border-transparent"
+                style={{
+                  borderImage: 'linear-gradient(90deg, #B08D57, #E2C17C, #B08D57, #ffffff) 1',
+                }}
+              />
+
+              {/* Multi-Color Stitched Brand Name */}
+              <motion.h2
+                initial={{ opacity: 0, scale: 0.9 }}
+                animate={{ opacity: 1, scale: 1 }}
+                transition={{ delay: 0.4, duration: 0.8 }}
+                className="font-display text-4xl sm:text-6xl tracking-[0.15em] uppercase text-transparent bg-clip-text bg-gradient-to-r from-[#B08D57] via-white to-[#E2C17C]"
               >
-                <span className="font-display text-2xl font-bold tracking-widest bg-gradient-to-r from-red-500 via-amber-300 via-emerald-400 to-indigo-400 bg-clip-text text-transparent animate-pulse">
-                  STITCH STUDIO®
-                </span>
-              </motion.div>
+                STITCH STUDIO
+              </motion.h2>
+
+              <motion.p
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                transition={{ delay: 0.7 }}
+                className="mt-4 font-mono-stitch text-xs tracking-[0.3em] uppercase text-white/50"
+              >
+                Crafted Thread By Thread • Est. On The Floor
+              </motion.p>
             </div>
 
-            <p className="font-sans-stitch text-xs text-white/60 mt-2">
-              Our signature sewn with pride, thread by thread.
+            {/* Bottom Caption */}
+            <p className="font-sans-stitch text-sm text-white/60 max-w-md mx-auto leading-relaxed">
+              Precision garment manufacturing across Men's, Women's, and Kid's divisions.
             </p>
           </motion.div>
         </motion.div>

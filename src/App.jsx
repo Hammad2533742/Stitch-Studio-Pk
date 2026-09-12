@@ -6,16 +6,16 @@ import PageNotFound from './lib/PageNotFound';
 import { AuthProvider, useAuth } from '@/lib/AuthContext';
 import UserNotRegisteredError from '@/components/UserNotRegisteredError';
 import ScrollToTop from './components/ScrollToTop';
-import ErrorBoundary from '@/components/ErrorBoundary'; // SECURITY: Added error boundary
+import ErrorBoundary from '@/components/ErrorBoundary';
 import Home from '@/pages/Home';
-import Starfield from '@/components/Starfield'; // Dynamic starfield background component
+import Starfield from '@/components/Starfield';
 
 const AuthenticatedApp = () => {
   const { isLoadingAuth, isLoadingPublicSettings, authError, navigateToLogin } = useAuth();
 
   if (isLoadingPublicSettings || isLoadingAuth) {
     return (
-      <div className="fixed inset-0 flex items-center justify-center" aria-label="Loading">
+      <div className="fixed inset-0 flex items-center justify-center bg-[#0a0a0a]" aria-label="Loading">
         <div className="w-8 h-8 border-4 border-slate-200 border-t-slate-800 rounded-full animate-spin" role="status" />
       </div>
     );
@@ -31,13 +31,10 @@ const AuthenticatedApp = () => {
   }
 
   return (
-    // SECURITY: Wrap routes in ErrorBoundary to prevent unhandled render crashes leaking stack traces[cite: 1]
     <ErrorBoundary>
-      <div className="relative min-h-screen bg-espresso text-cream overflow-hidden">
+      <div className="relative min-h-screen bg-[#0a0a0a] text-white overflow-x-hidden">
         {/* Dynamic Canvas Starfield Background */}
-        <div className="fixed inset-0 pointer-events-none z-0 opacity-40">
-          <Starfield />
-        </div>
+        <Starfield />
 
         {/* Foreground Content Wrapper */}
         <div className="relative z-10">

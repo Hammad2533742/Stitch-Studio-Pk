@@ -1,10 +1,5 @@
 import React, { useEffect, useRef } from 'react';
 
-/**
- * Starfield Component
- * Renders an optimized 2D starfield with gold accent particles,
- * dynamic twinking, smooth drift, and high-DPI (Retina) scaling.
- */
 export default function Starfield() {
   const canvasRef = useRef(null);
 
@@ -22,7 +17,6 @@ export default function Starfield() {
       w = window.innerWidth;
       h = window.innerHeight;
       
-      // High-DPI screen support (Retina crispness)
       const dpr = Math.min(window.devicePixelRatio || 1, 2);
       canvas.width = w * dpr;
       canvas.height = h * dpr;
@@ -30,7 +24,6 @@ export default function Starfield() {
       canvas.style.height = `${h}px`;
       ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
 
-      // Density calculation: Scales particle count based on screen area
       const count = Math.min(220, Math.floor((w * h) / 9000));
       stars = Array.from({ length: count }, () => ({
         x: Math.random() * w,
@@ -39,7 +32,7 @@ export default function Starfield() {
         a: Math.random() * 0.6 + 0.15,
         s: Math.random() * 0.02 + 0.004,
         ph: Math.random() * Math.PI * 2,
-        gold: Math.random() < 0.12, // ~12% gold accent particles
+        gold: Math.random() < 0.12,
       }));
     };
 
@@ -50,7 +43,6 @@ export default function Starfield() {
       ctx.clearRect(0, 0, w, h);
 
       for (const st of stars) {
-        // Sine-wave twinkle formula
         const tw = 0.5 + 0.5 * Math.sin(t * st.s + st.ph);
         
         ctx.beginPath();
@@ -60,7 +52,6 @@ export default function Starfield() {
           : `rgba(255,255,255,${st.a * tw})`;
         ctx.fill();
 
-        // Downward particle drift
         st.y += 0.03;
         if (st.y > h) st.y = 0;
       }
@@ -69,7 +60,6 @@ export default function Starfield() {
     setup();
     draw();
 
-    // ResizeObserver catches all viewport layout shifts accurately
     const ro = new ResizeObserver(() => setup());
     ro.observe(document.documentElement);
 
@@ -80,8 +70,8 @@ export default function Starfield() {
   }, []);
 
   return (
-    <div className="fixed inset-0 -z-10 pointer-events-none" aria-hidden="true">
-      <canvas ref={canvasRef} className="w-full h-full" />
+    <div className="fixed inset-0 z-0 pointer-events-none" aria-hidden="true">
+      <canvas ref={canvasRef} className="w-full h-full block" />
       <div
         className="absolute inset-0 opacity-50"
         style={{

@@ -1,88 +1,73 @@
 import { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Image } from '@/components/ui/image';
-import { ChevronLeft, ChevronRight, X } from 'lucide-react';
+import { ChevronLeft, ChevronRight, X, Sparkles } from 'lucide-react';
 
-// DYNAMIC CATEGORY DATA - All 17+ images can be listed here without hard limits
+// Automatically import ALL image URLs dynamically from your public folder
+const sportsModules = import.meta.glob('/public/StitchStudioPictures/sports/*.{png,jpg,jpeg,webp}', { eager: true, import: 'default' });
+const wovenModules = import.meta.glob('/public/StitchStudioPictures/woven/*.{png,jpg,jpeg,webp}', { eager: true, import: 'default' });
+const knitModules = import.meta.glob('/public/StitchStudioPictures/knit/*.{png,jpg,jpeg,webp}', { eager: true, import: 'default' });
+
+const formatImages = (globObj) =>
+  Object.keys(globObj).map((key, index) => ({
+    src: key.replace('/public', ''), // Normalizes path for static public folder serving
+    alt: `Item ${index + 1}`,
+  }));
+
 const FABRIC_CATEGORIES = [
   {
     id: 'sports',
     title: 'Sports & Activewear',
     subtitle: 'High-performance synthetics & technical knits',
     coverImage: 'https://media.base44.com/images/public/6aa4252f63cd2cf7a693af44/1d1f81319_generated_b934abc1.jpg',
-    images: [
-      { src: '/StitchStudioPictures/sports/sports-1.jpg', alt: 'Sports item 1' },
-      { src: '/StitchStudioPictures/sports/sports-2.jpg', alt: 'Sports item 2' },
-      { src: '/StitchStudioPictures/sports/sports-3.jpg', alt: 'Sports item 3' },
-      { src: '/StitchStudioPictures/sports/sports-4.jpg', alt: 'Sports item 4' },
-      { src: '/StitchStudioPictures/sports/sports-5.jpg', alt: 'Sports item 5' },
-      { src: '/StitchStudioPictures/sports/sports-6.jpg', alt: 'Sports item 6' },
-      { src: '/StitchStudioPictures/sports/sports-7.jpg', alt: 'Sports item 7' },
-      { src: '/StitchStudioPictures/sports/sports-8.jpg', alt: 'Sports item 8' },
-      { src: '/StitchStudioPictures/sports/sports-9.jpg', alt: 'Sports item 9' },
-      { src: '/StitchStudioPictures/sports/sports-10.jpg', alt: 'Sports item 10' },
-      { src: '/StitchStudioPictures/sports/sports-11.jpg', alt: 'Sports item 11' },
-      { src: '/StitchStudioPictures/sports/sports-12.jpg', alt: 'Sports item 12' },
-      { src: '/StitchStudioPictures/sports/sports-13.jpg', alt: 'Sports item 13' },
-      { src: '/StitchStudioPictures/sports/sports-14.jpg', alt: 'Sports item 14' },
-      { src: '/StitchStudioPictures/sports/sports-15.jpg', alt: 'Sports item 15' },
-      { src: '/StitchStudioPictures/sports/sports-16.jpg', alt: 'Sports item 16' },
-      { src: '/StitchStudioPictures/sports/sports-17.jpg', alt: 'Sports item 17' },
-    ],
+    images: formatImages(sportsModules),
   },
   {
     id: 'woven',
     title: 'Woven Precision',
     subtitle: 'Structured suiting, outerwear & cotton twills',
     coverImage: 'https://media.base44.com/images/public/6aa4252f63cd2cf7a693af44/d0e7b4c8f_generated_22b82780.jpg',
-    images: [
-      { src: '/StitchStudioPictures/woven/woven-1.jpg', alt: 'Woven item 1' },
-      { src: '/StitchStudioPictures/woven/woven-2.jpg', alt: 'Woven item 2' },
-      { src: '/StitchStudioPictures/woven/woven-3.jpg', alt: 'Woven item 3' },
-      { src: '/StitchStudioPictures/woven/woven-4.jpg', alt: 'Woven item 4' },
-    ],
+    images: formatImages(wovenModules),
   },
   {
     id: 'knitted',
     title: 'Knit Excellence',
     subtitle: 'Luxurious gauges, fleece & breathable knits',
     coverImage: 'https://media.base44.com/images/public/6aa4252f63cd2cf7a693af44/731f4f629_generated_c6024d9c.jpg',
-    images: [
-      { src: '/StitchStudioPictures/knit/knit-1.jpg', alt: 'Knit item 1' },
-      { src: '/StitchStudioPictures/knit/knit-2.jpg', alt: 'Knit item 2' },
-      { src: '/StitchStudioPictures/knit/knit-3.jpg', alt: 'Knit item 3' },
-    ],
+    images: formatImages(knitModules),
   },
 ];
 
-export default function AtelierFabricSections() {
+export default function AtelierFloor() {
   const [activeCategory, setActiveCategory] = useState(null);
-  const [slideIndex, setSlideIndex] = useState(0);
+  const [currentIndex, setCurrentIndex] = useState(0);
 
   const openSlider = (category) => {
     setActiveCategory(category);
-    setSlideIndex(0);
+    setCurrentIndex(0);
   };
 
   const handleNext = () => {
     if (!activeCategory) return;
-    setSlideIndex((prev) => (prev + 1) % activeCategory.images.length);
+    setCurrentIndex((prev) => (prev + 1) % activeCategory.images.length);
   };
 
   const handlePrev = () => {
     if (!activeCategory) return;
-    setSlideIndex((prev) => (prev - 1 + activeCategory.images.length) % activeCategory.images.length);
+    setCurrentIndex((prev) => (prev - 1 + activeCategory.images.length) % activeCategory.images.length);
   };
 
   return (
-    <section className="px-6 sm:px-10 py-24 max-w-[120rem] mx-auto">
+    <section id="atelier" className="px-6 sm:px-10 py-24 max-w-[120rem] mx-auto">
       <div className="mb-12">
-        <span className="font-mono-stitch text-[10px] tracking-[0.35em] uppercase text-white/40">Techniques</span>
-        <h2 className="mt-4 font-display text-4xl sm:text-5xl text-white">Fabrications & Crafts</h2>
+        <span className="font-mono-stitch text-[10px] tracking-[0.35em] uppercase text-[#B08D57]">
+          Gender-Independent Fabrications
+        </span>
+        <h2 className="mt-2 font-display text-4xl sm:text-5xl text-white">Fabrication Categories</h2>
       </div>
 
-      {/* Elegant Cover Cards Grid */}
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+      {/* Fabric Category Cover Cards */}
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
         {FABRIC_CATEGORIES.map((cat, i) => (
           <motion.div
             key={cat.id}
@@ -91,104 +76,120 @@ export default function AtelierFabricSections() {
             viewport={{ once: true }}
             transition={{ duration: 0.6, delay: i * 0.1 }}
             onClick={() => openSlider(cat)}
-            className="group relative aspect-[4/5] rounded-lg overflow-hidden bg-[#111] border border-white/10 cursor-pointer"
+            className="group relative aspect-[4/5] rounded-xl overflow-hidden bg-[#111] border border-white/10 cursor-pointer shadow-2xl"
           >
             <Image
               src={cat.coverImage}
               alt={cat.title}
-              className="absolute inset-0 w-full h-full transition-transform duration-700 group-hover:scale-105"
+              className="absolute inset-0 w-full h-full transition-transform duration-700 group-hover:scale-105 filter brightness-90 group-hover:brightness-100"
               fittingType="fill"
             />
-            <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/30 to-transparent" />
+            <div className="absolute inset-0 bg-gradient-to-t from-black/95 via-black/40 to-transparent" />
             <div className="absolute inset-0 p-8 flex flex-col justify-end">
-              <span className="font-mono-stitch text-[10px] uppercase tracking-[0.2em] text-[#B08D57]">
-                {cat.images.length} Dynamic Items Available
+              <span className="font-mono-stitch text-[10px] uppercase tracking-[0.25em] text-[#B08D57] flex items-center gap-2">
+                <Sparkles className="w-3 h-3" />
+                {cat.images.length > 0 ? `${cat.images.length} Loaded Items` : 'Dynamic Gallery'}
               </span>
-              <h3 className="font-display text-2xl text-white mt-1">{cat.title}</h3>
-              <p className="text-xs text-white/60 font-sans-stitch mt-1">{cat.subtitle}</p>
+              <h3 className="font-display text-3xl text-white mt-1">{cat.title}</h3>
+              <p className="text-xs text-white/60 font-sans-stitch mt-2">{cat.subtitle}</p>
               <button
                 type="button"
-                className="mt-4 inline-flex items-center text-xs font-mono-stitch tracking-widest text-[#B08D57] uppercase group-hover:text-white transition-colors"
+                className="mt-6 inline-flex items-center text-xs font-mono-stitch tracking-widest text-white uppercase group-hover:text-[#B08D57] transition-colors"
               >
-                Explore Collection →
+                Launch Dynamic Gallery →
               </button>
             </div>
           </motion.div>
         ))}
       </div>
 
-      {/* Dynamic Slide Transition Modal (Supports Unlimited Images) */}
+      {/* Interactive 3D Carousel Modal */}
       <AnimatePresence>
         {activeCategory && (
           <motion.div
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
-            className="fixed inset-0 z-[130] bg-black/95 backdrop-blur-2xl flex flex-col justify-between p-6 sm:p-12"
+            className="fixed inset-0 z-[160] bg-black/95 backdrop-blur-2xl flex flex-col justify-between p-6 sm:p-10 select-none"
           >
-            {/* Header */}
+            {/* Header Controls */}
             <div className="flex items-center justify-between border-b border-white/10 pb-4">
               <div>
-                <h4 className="font-display text-2xl text-white">{activeCategory.title}</h4>
-                <p className="font-mono-stitch text-xs text-[#B08D57] tracking-widest uppercase">
-                  Showing {slideIndex + 1} of {activeCategory.images.length}
+                <h4 className="font-display text-2xl text-white tracking-wide">{activeCategory.title}</h4>
+                <p className="font-mono-stitch text-xs text-[#B08D57] tracking-widest uppercase mt-1">
+                  Item {currentIndex + 1} of {activeCategory.images.length}
                 </p>
               </div>
               <button
                 type="button"
                 onClick={() => setActiveCategory(null)}
-                className="p-2 text-white/50 hover:text-white transition-colors"
+                className="p-3 text-white/50 hover:text-white transition-colors bg-white/5 rounded-full"
+                aria-label="Close Gallery"
               >
-                <X className="w-8 h-8" />
+                <X className="w-6 h-6" />
               </button>
             </div>
 
-            {/* Slider Stage */}
-            <div className="relative flex-1 flex items-center justify-center my-6 overflow-hidden">
-              <AnimatePresence mode="wait">
-                <motion.div
-                  key={slideIndex}
-                  initial={{ opacity: 0, x: 100 }}
-                  animate={{ opacity: 1, x: 0 }}
-                  exit={{ opacity: 0, x: -100 }}
-                  transition={{ duration: 0.4, ease: 'easeInOut' }}
-                  className="max-w-4xl max-h-[65vh] w-full h-full flex items-center justify-center"
-                >
-                  <Image
-                    src={activeCategory.images[slideIndex].src}
-                    alt={activeCategory.images[slideIndex].alt}
-                    className="max-w-full max-h-full object-contain rounded-lg shadow-2xl border border-white/10"
-                    fittingType="fit"
-                  />
-                </motion.div>
-              </AnimatePresence>
+            {/* Interactive Image Stage */}
+            <div className="relative flex-1 flex items-center justify-center my-6">
+              {activeCategory.images.length > 0 ? (
+                <div className="relative w-full max-w-4xl h-[60vh] flex items-center justify-center">
+                  <AnimatePresence mode="popLayout">
+                    <motion.div
+                      key={currentIndex}
+                      initial={{ scale: 0.8, opacity: 0, rotateY: 25, x: 150 }}
+                      animate={{ scale: 1, opacity: 1, rotateY: 0, x: 0 }}
+                      exit={{ scale: 0.8, opacity: 0, rotateY: -25, x: -150 }}
+                      transition={{ duration: 0.5, ease: [0.16, 1, 0.3, 1] }}
+                      className="absolute inset-0 flex items-center justify-center"
+                    >
+                      <Image
+                        src={activeCategory.images[currentIndex].src}
+                        alt={activeCategory.images[currentIndex].alt}
+                        className="max-w-full max-h-full object-contain rounded-2xl shadow-[0_0_50px_rgba(0,0,0,0.8)] border border-white/10"
+                        fittingType="fit"
+                      />
+                    </motion.div>
+                  </AnimatePresence>
+                </div>
+              ) : (
+                <div className="text-center font-mono-stitch text-white/40 uppercase tracking-widest">
+                  No images found in /public/StitchStudioPictures/{activeCategory.id}/
+                </div>
+              )}
 
-              {/* Prev / Next Arrows */}
-              <button
-                type="button"
-                onClick={handlePrev}
-                className="absolute left-4 top-1/2 -translate-y-1/2 bg-black/60 hover:bg-[#B08D57] text-white p-4 rounded-full border border-white/20 transition-all"
-              >
-                <ChevronLeft className="w-6 h-6" />
-              </button>
-              <button
-                type="button"
-                onClick={handleNext}
-                className="absolute right-4 top-1/2 -translate-y-1/2 bg-black/60 hover:bg-[#B08D57] text-white p-4 rounded-full border border-white/20 transition-all"
-              >
-                <ChevronRight className="w-6 h-6" />
-              </button>
+              {/* Navigation Controls */}
+              {activeCategory.images.length > 1 && (
+                <>
+                  <button
+                    type="button"
+                    onClick={handlePrev}
+                    className="absolute left-2 sm:left-8 top-1/2 -translate-y-1/2 bg-black/80 hover:bg-[#B08D57] text-white p-4 rounded-full border border-white/20 transition-all hover:scale-110 active:scale-95 shadow-xl"
+                  >
+                    <ChevronLeft className="w-7 h-7" />
+                  </button>
+                  <button
+                    type="button"
+                    onClick={handleNext}
+                    className="absolute right-2 sm:right-8 top-1/2 -translate-y-1/2 bg-black/80 hover:bg-[#B08D57] text-white p-4 rounded-full border border-white/20 transition-all hover:scale-110 active:scale-95 shadow-xl"
+                  >
+                    <ChevronRight className="w-7 h-7" />
+                  </button>
+                </>
+              )}
             </div>
 
-            {/* Thumbnails Bar */}
-            <div className="flex gap-2 overflow-x-auto justify-center py-2 border-t border-white/10">
+            {/* Scrollable Thumbnail Strip */}
+            <div className="flex gap-3 overflow-x-auto justify-start sm:justify-center py-3 border-t border-white/10 no-scrollbar">
               {activeCategory.images.map((img, idx) => (
                 <button
                   key={idx}
                   type="button"
-                  onClick={() => setSlideIndex(idx)}
-                  className={`w-14 h-14 rounded overflow-hidden border-2 transition-all flex-shrink-0 ${
-                    idx === slideIndex ? 'border-[#B08D57] scale-105' : 'border-transparent opacity-30 hover:opacity-100'
+                  onClick={() => setCurrentIndex(idx)}
+                  className={`relative w-16 h-16 rounded-lg overflow-hidden border-2 transition-all flex-shrink-0 cursor-pointer ${
+                    idx === currentIndex
+                      ? 'border-[#B08D57] scale-110 opacity-100 shadow-[0_0_15px_rgba(176,141,87,0.5)]'
+                      : 'border-transparent opacity-30 hover:opacity-80'
                   }`}
                 >
                   <Image src={img.src} alt={img.alt} className="w-full h-full object-cover" fittingType="fill" />

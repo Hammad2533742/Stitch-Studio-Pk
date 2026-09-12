@@ -1,11 +1,9 @@
 import StitchNav from '@/components/StitchNav';
 import Ticker from '@/components/Ticker';
 import Hero from '@/components/Hero';
+import Divisions from '@/components/Divisions';
 import AtelierFloor from '@/components/AtelierFloor';
 import Manifesto from '@/components/Manifesto';
-import Divisions from '@/components/Divisions';
-import Categories from '@/components/Categories';
-import HomeTextile from '@/components/HomeTextile';
 import Footer from '@/components/Footer';
 import NeedleCursor from '@/components/NeedleCursor';
 import Chatbot from '@/components/Chatbot';
@@ -22,14 +20,21 @@ export default function Home() {
       <div className="pt-16">
         <Ticker />
         <main>
+          {/* Hero Section with 3D Sewing Machine & Animated Stats */}
           <Hero />
+
+          {/* Section 01: Manifesto */}
+          <Manifesto />
+
+          {/* Section 02: 3 Main Gender Divisions (Men's, Women's, Kid's) */}
+          <ErrorBoundary>
+            <Divisions />
+          </ErrorBoundary>
+
+          {/* Section 03: 3 Gender-Independent Fabrications (Sports, Woven, Knit) */}
           <ErrorBoundary>
             <AtelierFloor />
           </ErrorBoundary>
-          <Manifesto />
-          <Divisions />
-          <Categories />
-          <HomeTextile />
         </main>
         <Footer />
       </div>

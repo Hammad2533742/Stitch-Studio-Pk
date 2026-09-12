@@ -1,0 +1,13 @@
+@import "tailwindcss";
+
+@theme {
+  --font-display: "Cormorant Garamond", Georgia, serif;
+  --font-sans-stitch: Jost, sans-serif;
+  --font-mono-stitch: "JetBrains Mono", monospace;
+  --animate-marquee: marquee 32s linear infinite;
+}
+@keyframes marquee { to { transform: translateX(-25%); } }
+html { scroll-behavior: smooth; background: #0a0a0a; }
+body { margin: 0; min-width: 320px; background: #0a0a0a; }
+*, ::before, ::after { box-sizing: border-box; }
+button, input { font: inherit; }

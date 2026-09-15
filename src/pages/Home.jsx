@@ -8,7 +8,26 @@ import Footer from '@/components/Footer';
 import NeedleCursor from '@/components/NeedleCursor';
 import Chatbot from '@/components/Chatbot';
 import ErrorBoundary from '@/components/ErrorBoundary';
+import React from 'react';
+// Keep all your existing imports untouched
+import OperationsVideo from '../components/OperationsVideo';
+import FaqAccordion from '../components/FaqAccordion';
+import SignUpSection from '../components/SignUpSection';
 
+export default function Home() {
+  return (
+    <main>
+      {/* 1. Your original top components stay here */}
+
+      {/* 2. Seamlessly append the new features */}
+      <OperationsVideo />
+      <FaqAccordion />
+      <SignUpSection />
+
+      {/* 3. Your original bottom components stay here */}
+    </main>
+  );
+}
 export default function Home() {
   return (
     <div className="min-h-screen bg-transparent text-white selection:bg-[#B08D57] selection:text-white">

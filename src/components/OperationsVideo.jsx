@@ -8,10 +8,13 @@ export default function OperationsVideo() {
       <p className={styles.subheading}>Experience our end-to-end craft and production pipeline in real time.</p>
       
       <div className={styles.videoWrapper}>
-        <video controls poster="/assets/video-thumbnail.jpg" className={styles.videoPlayer}>
-          <source src="/assets/operations.mp4" type="video/mp4" />
-          Your browser does not support the video tag.
-        </video>
+        <iframe
+          src="https://drive.google.com/file/d/1XuRCoU7rmdIUM0oXfsF_wUbXcpqYLqce/preview"
+          title="Stitch Studio Operations Video"
+          className={styles.iframePlayer}
+          allow="autoplay"
+          allowFullScreen
+        ></iframe>
       </div>
     </section>
   );

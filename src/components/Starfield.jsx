@@ -9,14 +9,14 @@ export default function Starfield() {
 
     const ctx = canvas.getContext('2d');
     let raf;
-    let stars = [];
+    let threads = [];
+    const pointer = { x: -1000, y: -1000 };
     let w = window.innerWidth;
     let h = window.innerHeight;
 
     const setup = () => {
       w = window.innerWidth;
       h = window.innerHeight;
-      
       const dpr = Math.min(window.devicePixelRatio || 1, 2);
       canvas.width = w * dpr;
       canvas.height = h * dpr;
@@ -24,36 +24,32 @@ export default function Starfield() {
       canvas.style.height = `${h}px`;
       ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
 
-      const count = Math.min(220, Math.floor((w * h) / 9000));
-      stars = Array.from({ length: count }, () => ({
-        x: Math.random() * w,
-        y: Math.random() * h,
-        r: Math.random() * 1.3 + 0.2,
-        a: Math.random() * 0.6 + 0.15,
-        s: Math.random() * 0.02 + 0.004,
-        ph: Math.random() * Math.PI * 2,
-        gold: Math.random() < 0.12,
+      const count = Math.max(12, Math.min(26, Math.floor(w / 72)));
+      threads = Array.from({ length: count }, (_, index) => ({
+        x: ((index + 0.5) / count) * w,
+        phase: Math.random() * Math.PI * 2,
+        amplitude: 8 + Math.random() * 18,
+        speed: 0.00035 + Math.random() * 0.00025,
+        opacity: 0.06 + Math.random() * 0.08,
       }));
     };
 
-    let t = 0;
-    const draw = () => {
+    const draw = (time) => {
       raf = requestAnimationFrame(draw);
-      t += 1;
       ctx.clearRect(0, 0, w, h);
 
-      for (const st of stars) {
-        const tw = 0.5 + 0.5 * Math.sin(t * st.s + st.ph);
-        
+      for (const thread of threads) {
+        const distance = Math.abs(pointer.x - thread.x);
+        const pull = Math.max(0, 1 - distance / 260) * 18;
         ctx.beginPath();
-        ctx.arc(st.x, st.y, st.r, 0, Math.PI * 2);
-        ctx.fillStyle = st.gold
-          ? `rgba(176,141,87,${st.a * tw})`
-          : `rgba(255,255,255,${st.a * tw})`;
-        ctx.fill();
-
-        st.y += 0.03;
-        if (st.y > h) st.y = 0;
+        for (let y = -24; y <= h + 24; y += 20) {
+          const x = thread.x + Math.sin(y * 0.014 + time * thread.speed + thread.phase) * thread.amplitude + pull;
+          if (y === -24) ctx.moveTo(x, y);
+          else ctx.lineTo(x, y);
+        }
+        ctx.strokeStyle = `rgba(156, 122, 70, ${thread.opacity})`;
+        ctx.lineWidth = 1;
+        ctx.stroke();
       }
     };
 
@@ -62,10 +58,22 @@ export default function Starfield() {
 
     const ro = new ResizeObserver(() => setup());
     ro.observe(document.documentElement);
+    const move = (event) => {
+      pointer.x = event.clientX;
+      pointer.y = event.clientY;
+    };
+    const leave = () => {
+      pointer.x = -1000;
+      pointer.y = -1000;
+    };
+    window.addEventListener('pointermove', move, { passive: true });
+    window.addEventListener('blur', leave);
 
     return () => {
       cancelAnimationFrame(raf);
       ro.disconnect();
+      window.removeEventListener('pointermove', move);
+      window.removeEventListener('blur', leave);
     };
   }, []);
 
@@ -76,7 +84,7 @@ export default function Starfield() {
         className="absolute inset-0 opacity-50"
         style={{
           background:
-            'radial-gradient(ellipse at 50% 0%, rgba(176,141,87,0.10), transparent 55%), radial-gradient(ellipse at 50% 100%, rgba(176,141,87,0.06), transparent 60%)',
+            'radial-gradient(ellipse at 50% 0%, rgba(156,122,70,0.08), transparent 55%), radial-gradient(ellipse at 50% 100%, rgba(156,122,70,0.05), transparent 60%)',
         }}
       />
     </div>

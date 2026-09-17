@@ -1,10 +1,5 @@
 import { Component } from 'react';
 
-/**
- * SECURITY: Global React error boundary.
- * Catches unhandled render errors and shows a safe fallback UI,
- * preventing raw stack traces from leaking to the user.
- */
 export default class ErrorBoundary extends Component {
   constructor(props) {
     super(props);
@@ -16,7 +11,6 @@ export default class ErrorBoundary extends Component {
   }
 
   componentDidCatch(error, info) {
-    // Log to your observability service here (e.g. Sentry) — never expose to the DOM.
     if (process.env.NODE_ENV !== 'production') {
       console.error('[ErrorBoundary]', error, info);
     }
@@ -25,18 +19,11 @@ export default class ErrorBoundary extends Component {
   render() {
     if (this.state.hasError) {
       return (
-        <div className="min-h-screen bg-[#0a0a0a] flex items-center justify-center px-6 text-center">
+        <div className="min-h-screen bg-canvas flex items-center justify-center px-6 text-center">
           <div>
-            <p className="font-mono-stitch text-[11px] tracking-[0.3em] uppercase text-white/40 mb-4">
-              Something went wrong
-            </p>
-            <h1 className="font-display text-4xl text-white mb-6">
-              Atelier temporarily unavailable.
-            </h1>
-            <button
-              onClick={() => window.location.reload()}
-              className="border border-white/30 text-white font-mono-stitch text-xs tracking-[0.2em] uppercase px-7 py-4 hover:bg-white hover:text-[#0a0a0a] transition-colors"
-            >
+            <p className="font-mono-stitch text-[11px] tracking-[0.3em] uppercase text-ink/40 mb-4">Something went wrong</p>
+            <h1 className="font-display text-4xl text-ink mb-6">Atelier temporarily unavailable.</h1>
+            <button onClick={() => window.location.reload()} className="border border-ink/30 text-ink font-mono-stitch text-xs tracking-[0.2em] uppercase px-7 py-4 hover:bg-ink hover:text-canvas transition-colors">
               Reload
             </button>
           </div>

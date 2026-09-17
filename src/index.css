@@ -1,43 +1,30 @@
 @import "tailwindcss";
-
-/* Tailwind CSS v4 theme directive. */
+/* Tailwind CSS v4 directive: @theme is intentionally non-standard CSS. */
 /* stylelint-disable at-rule-no-unknown */
-/* css-lint-disable unknownAtRules */
-@theme {
+@theme
+{
   --font-display: "Cormorant Garamond", Georgia, serif;
   --font-sans-stitch: Jost, sans-serif;
   --font-mono-stitch: "JetBrains Mono", monospace;
   --animate-marquee: marquee 32s linear infinite;
+
+  /* Beige atelier palette */
+  --color-canvas: #F4EEE3;
+  --color-panel: #EAE1D0;
+  --color-panel-soft: #F0E7D6;
+  --color-ink: #2B2118;
+  --color-gold: #9C7A46;
+  --color-gold-light: #B08D57;
 }
 /* stylelint-enable at-rule-no-unknown */
-/* css-lint-enable unknownAtRules */
 @keyframes marquee { to { transform: translateX(-25%); } }
-html { scroll-behavior: smooth; background: #0a0a0a; }
-body { margin: 0; min-width: 320px; background: #0a0a0a; }
+html { scroll-behavior: smooth; background: #F4EEE3; overflow-x: hidden; }
+body { margin: 0; min-width: 320px; background: #F4EEE3; overflow-x: hidden; width: 100%; }
 *, ::before, ::after { box-sizing: border-box; }
-button, input { font: inherit; }
-
-/* 1. Ensure smooth scrolling across the entire page */
-html {
-  scroll-behavior: smooth;
-  overflow-x: hidden;
-}
-
-body {
-  overflow-x: hidden;
-  width: 100%;
-}
-
-/* 2. Prevent images from breaking out of parent containers */
-img {
-  max-width: 100%;
-  height: auto;
-  display: block;
-  object-fit: cover;
-}
-
-/* 3. If you have an image gallery or flex row, ensure it wraps cleanly */
+button, input, textarea, select { font: inherit; }
+img { max-width: 100%; height: auto; display: block; object-fit: cover; }
 .image-gallery-container,
+
 .gallery-grid {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
@@ -45,5 +32,4 @@ img {
   width: 100%;
   max-width: 1200px;
   margin: 0 auto;
-  padding: 2rem 1rem;
-}
+  padding: 2rem 1rem; }

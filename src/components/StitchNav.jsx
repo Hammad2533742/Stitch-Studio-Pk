@@ -16,16 +16,15 @@ const LINKS = [
 export default function StitchNav() {
   const [open, setOpen] = useState(false);
 
-  // SECURITY: useCallback prevents creating new function refs on every render
   const close = useCallback(() => setOpen(false), []);
   const toggle = useCallback(() => setOpen((o) => !o), []);
 
   return (
     <>
-      <header className="fixed top-0 inset-x-0 z-50 bg-[#0a0a0a]/80 backdrop-blur-md border-b border-white/10">
+      <header className="fixed top-0 inset-x-0 z-50 bg-canvas/80 backdrop-blur-md border-b border-ink/10">
         <div className="flex items-center justify-between px-5 sm:px-8 h-16">
           <a href="#top" className="flex items-center gap-3" aria-label="Stitch Studio — home">
-            <div className="w-9 h-9 rounded-full overflow-hidden ring-1 ring-white/20 bg-white/5">
+            <div className="w-9 h-9 rounded-full overflow-hidden ring-1 ring-ink/15 bg-ink/5">
               <Image
                 src={LOGO_URL}
                 alt="Stitch Studio logo"
@@ -33,8 +32,8 @@ export default function StitchNav() {
                 fittingType="fit"
               />
             </div>
-            <span className="font-display text-xl tracking-tight text-white">
-              Stitch Studio<span className="text-[#B08D57]">®</span>
+            <span className="font-display text-xl tracking-tight text-ink">
+              Stitch Studio<span className="text-gold">®</span>
             </span>
           </a>
 
@@ -43,15 +42,14 @@ export default function StitchNav() {
               <a
                 key={l.label}
                 href={l.href}
-                className="font-mono-stitch text-[11px] tracking-[0.2em] uppercase text-white/70 hover:text-white transition-colors"
+                className="font-mono-stitch text-[11px] tracking-[0.2em] uppercase text-ink/70 hover:text-ink transition-colors"
               >
                 {l.label}
               </a>
             ))}
-            {/* FIX: href was href__ — corrected throughout */}
             <a
-              href="#atelier"
-              className="font-mono-stitch text-[11px] tracking-[0.2em] uppercase text-white border border-white/30 px-5 py-2.5 hover:bg-white hover:text-[#0a0a0a] transition-colors"
+              href="#contact"
+              className="font-mono-stitch text-[11px] tracking-[0.2em] uppercase text-ink border border-ink/30 px-5 py-2.5 hover:bg-ink hover:text-canvas transition-colors"
             >
               Inquire
             </a>
@@ -59,7 +57,7 @@ export default function StitchNav() {
 
           <button
             onClick={toggle}
-            className="md:hidden text-white p-2 min-h-[44px] min-w-[44px] flex items-center justify-center"
+            className="md:hidden text-ink p-2 min-h-[44px] min-w-[44px] flex items-center justify-center"
             aria-label={open ? 'Close menu' : 'Open menu'}
             aria-expanded={open}
             aria-controls="mobile-nav"
@@ -79,13 +77,13 @@ export default function StitchNav() {
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
-            className="fixed inset-0 z-[60] bg-[#0a0a0a] flex flex-col"
+            className="fixed inset-0 z-[60] bg-canvas flex flex-col"
           >
-            <div className="flex items-center justify-between px-5 h-16 border-b border-white/10">
-              <span className="font-display text-xl text-white">Stitch Studio®</span>
+            <div className="flex items-center justify-between px-5 h-16 border-b border-ink/10">
+              <span className="font-display text-xl text-ink">Stitch Studio®</span>
               <button
                 onClick={close}
-                className="text-white p-2 min-h-[44px] min-w-[44px] flex items-center justify-center"
+                className="text-ink p-2 min-h-[44px] min-w-[44px] flex items-center justify-center"
                 aria-label="Close menu"
               >
                 <X className="w-5 h-5" />
@@ -93,15 +91,15 @@ export default function StitchNav() {
             </div>
 
             <nav className="flex-1 flex flex-col justify-center px-6 gap-2" aria-label="Mobile navigation">
-              {[...LINKS, { label: 'Atelier', href: '#atelier' }].map((l, i) => (
+              {[...LINKS, { label: 'Contact', href: '#contact' }].map((l, i) => (
                 <motion.a
                   key={l.label}
-                  href={l.href}           // FIX: was href__
+                  href={l.href}
                   onClick={close}
                   initial={{ y: 30, opacity: 0 }}
                   animate={{ y: 0, opacity: 1 }}
                   transition={{ delay: i * 0.05 }}
-                  className="font-display text-4xl text-white py-3 border-b border-white/10 hover:text-[#B08D57]"
+                  className="font-display text-4xl text-ink py-3 border-b border-ink/10 hover:text-gold"
                 >
                   {l.label}
                 </motion.a>

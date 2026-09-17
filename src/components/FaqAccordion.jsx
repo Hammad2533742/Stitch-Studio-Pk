@@ -5,14 +5,8 @@ export default function FaqAccordion() {
   const [openIdx, setOpenIdx] = useState(null);
 
   const faqs = [
-    {
-      q: "What services does Stitch Studio offer?",
-      a: "We provide bespoke garment manufacturing, automated production workflows, and full-stack digital solutions."
-    },
-    {
-      q: "How do I access the operations workspace?",
-      a: "Create an account via our Sign Up section to gain instant access to real-time production insights."
-    }
+    { q: "What services does Stitch Studio offer?", a: "We provide bespoke garment manufacturing, automated production workflows, and full-stack digital solutions." },
+    { q: "How do I access the operations workspace?", a: "Create an account via our Sign Up section to gain instant access to real-time production insights." },
   ];
 
   return (

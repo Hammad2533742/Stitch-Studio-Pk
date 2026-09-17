@@ -15,8 +15,8 @@ const AuthenticatedApp = () => {
 
   if (isLoadingPublicSettings || isLoadingAuth) {
     return (
-      <div className="fixed inset-0 flex items-center justify-center bg-[#0a0a0a]" aria-label="Loading">
-        <div className="w-8 h-8 border-4 border-slate-200 border-t-slate-800 rounded-full animate-spin" role="status" />
+      <div className="fixed inset-0 flex items-center justify-center bg-canvas" aria-label="Loading">
+        <div className="w-8 h-8 border-4 border-ink/20 border-t-ink rounded-full animate-spin" role="status" />
       </div>
     );
   }
@@ -32,11 +32,8 @@ const AuthenticatedApp = () => {
 
   return (
     <ErrorBoundary>
-      <div className="relative min-h-screen bg-[#0a0a0a] text-white overflow-x-hidden">
-        {/* Dynamic Canvas Starfield Background */}
+      <div className="relative min-h-screen bg-canvas text-ink overflow-x-hidden">
         <Starfield />
-
-        {/* Foreground Content Wrapper */}
         <div className="relative z-10">
           <Routes>
             <Route path="/" element={<Home />} />

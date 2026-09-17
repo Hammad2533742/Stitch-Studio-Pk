@@ -18,22 +18,22 @@ export default function HomeTextile() {
           viewport={{ once: true, margin: '-80px' }}
           transition={{ duration: 0.7 }}
         >
-          <span className="font-mono-stitch text-[10px] tracking-[0.35em] uppercase text-white/40">
+          <span className="font-mono-stitch text-[10px] tracking-[0.35em] uppercase text-ink/40">
             Partner integration
           </span>
-          <h2 className="mt-4 font-display text-4xl sm:text-5xl tracking-tight text-white">
+          <h2 className="mt-4 font-display text-4xl sm:text-5xl tracking-tight text-ink">
             Home textile
           </h2>
-          <p className="mt-6 text-white/60 font-sans-stitch text-lg leading-relaxed max-w-md">
+          <p className="mt-6 text-ink/70 font-sans-stitch text-lg leading-relaxed max-w-md">
             Our home textile and canvas manufacturing is operated by our partner — Nadir Saidjan
             Industries, a vertically integrated mill. Explore their catalog directly.
           </p>
-          {/* FIX: href was href__; rel="noopener noreferrer" already correct */}
+          
           <a
             href="https://nadirsaidjan.com/"
             target="_blank"
             rel="noopener noreferrer"
-            className="mt-8 inline-flex items-center gap-2 border border-white/30 text-white font-mono-stitch text-xs tracking-[0.2em] uppercase px-7 py-4 hover:bg-white hover:text-[#0a0a0a] transition-colors"
+            className="mt-8 inline-flex items-center gap-2 border border-ink/30 text-ink font-mono-stitch text-xs tracking-[0.2em] uppercase px-7 py-4 hover:bg-ink hover:text-canvas transition-colors"
           >
             Visit nadirsaidjan.com →
           </a>
@@ -44,7 +44,7 @@ export default function HomeTextile() {
           whileInView={{ y: 0, opacity: 1 }}
           viewport={{ once: true, margin: '-80px' }}
           transition={{ duration: 0.7, delay: 0.15 }}
-          className="relative aspect-[4/3] overflow-hidden rounded-sm border border-white/10"
+          className="relative aspect-[4/3] overflow-hidden rounded-sm border border-ink/10"
         >
           <Image
             src={TEXTILE_IMG}
